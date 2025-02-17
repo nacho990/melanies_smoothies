@@ -3,6 +3,11 @@ import streamlit as st
 from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 
+# Verificar si los secrets existen antes de usarlos
+if "snowflake" not in st.secrets:
+    st.error("❌ No se encontraron credenciales de Snowflake en `st.secrets`. Verifica la configuración en Streamlit Cloud.")
+    st.stop()
+
 # Configurar conexión con Snowflake desde `st.secrets`
 try:
     connection_parameters = {
