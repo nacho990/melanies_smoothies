@@ -4,17 +4,6 @@ import streamlit as st
 from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 
-# Configurar conexión a Snowflake directamente en el código
-connection_parameters = {
-    "account": "xxx",
-    "user": "IAGUDO",
-    "password": "EmpiezaLaFormacion_2025",
-    "database": "SMOOTHIES",
-    "schema": "PUBLIC",
-    "warehouse": "COMPUTE_WH",
-    "role": "SYSADMIN"
-}
-
 # Crear sesión con Snowflake
 session = Session.builder.configs(connection_parameters).create()
 
