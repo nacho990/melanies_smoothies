@@ -6,7 +6,7 @@ from snowflake.snowpark.functions import col
 
 # Configurar conexión a Snowflake directamente en el código
 connection_parameters = {
-    "account": "IDPXYJH.XKB90357",
+    "account": "IDPXYJH-XKB90357",
     "user": "IAGUDO",
     "password": "EmpiezaLaFormacion_2025",
     "database": "SMOOTHIES",
