@@ -3,6 +3,20 @@ import streamlit as st
 #from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
+# Configurar conexión a Snowflake directamente en el código
+connection_parameters = {
+    "account": "IDPXYJH.XKB90357",
+    "user": "IAGUDO",
+    "password": "EmpiezaLaFormacion_2025",
+    "database": "SMOOTHIES",
+    "schema": "PUBLIC",
+    "warehouse": "COMPUTE_WH",
+    "role": "SYSADMIN"
+}
+
+# Crear sesión con Snowflake
+session = Session.builder.configs(connection_parameters).create()
+
 # Write directly to the app
 st.title(" :cup_with_straw: Cusomize your Smoothies :cup_with_straw:")
 st.write(
