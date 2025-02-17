@@ -1,13 +1,30 @@
-# Import python packages
+# Importar paquetes necesarios
 import streamlit as st
-#from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 
-# Crear sesión con Snowflake
-session = Session.builder.configs(connection_parameters).create()
+# Configurar conexión con Snowflake desde `st.secrets`
+try:
+    connection_parameters = {
+        "account": st.secrets["snowflake"]["account"],
+        "user": st.secrets["snowflake"]["user"],
+        "password": st.secrets["snowflake"]["password"],
+        "database": st.secrets["snowflake"]["database"],
+        "schema": st.secrets["snowflake"]["schema"],
+        "warehouse": st.secrets["snowflake"]["warehouse"],
+        "role": st.secrets["snowflake"]["role"],
+        "client_session_keep_alive": st.secrets["snowflake"].get("client_session_keep_alive", True)
+    }
 
-# Write directly to the app
+    # Crear sesión con Snowflake
+    session = Session.builder.configs(connection_parameters).create()
+    st.success("✅ Conectado a Snowflake correctamente.")
+
+except Exception as e:
+    st.error(f"❌ Error de conexión a Snowflake: {e}")
+    st.stop()
+
+# Título de la app
 st.title(" :cup_with_straw: Cusomize your Smoothies :cup_with_straw:")
 st.write(
     "Choose the fruit you want in your custom Smoothie!"
