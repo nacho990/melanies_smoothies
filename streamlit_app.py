@@ -82,7 +82,7 @@ if time_to_insert:
     try:
         # Definir la sentencia SQL para insertar la orden en la base de datos
         my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders (customer_name, ingredients)
+        INSERT INTO SMOOTHIES.PUBLIC.ORDERS (NAME_ON_ORDER, INGREDIENTS)
         VALUES ('{name_on_order}', '{ingredients_string}')
         """
         
