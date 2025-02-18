@@ -40,15 +40,15 @@ st.write("The name on your Smoothie will be:", name_on_order)
 
 # Obtener ingredientes desde Snowflake
 try:
-    my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'),col('SEARCH_ON')).to_pandas()
-
+    my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'), col('SEARCH_ON')).to_pandas()
+    
     # Crear un diccionario para mapear FRUIT_NAME -> SEARCH_ON
     search_on_mapping = dict(zip(my_dataframe['FRUIT_NAME'], my_dataframe['SEARCH_ON']))
     
     ingredients_list = st.multiselect(
         'Choose up to 5 ingredients:',
-        my_dataframe['FRUIT_NAME'],  # Convertir a lista de pandas
-        max_selections = 6
+        my_dataframe['FRUIT_NAME'],  # Mostrar nombres de fruta
+        max_selections=5
     )
 except Exception as e:
     st.error(f"❌ Error al obtener datos: {e}")
@@ -56,9 +56,9 @@ except Exception as e:
 # Insertar orden en la base de datos
 if ingredients_list:
     ingredients_string = ' '.join(ingredients_list)  # Convertir la lista en una cadena de texto
-    
+
     for fruit_chosen in ingredients_list:
-       # Obtener el valor de SEARCH_ON correspondiente
+        # Obtener el valor de SEARCH_ON correspondiente
         search_on = my_dataframe.loc[my_dataframe['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
 
         # Validar la relación
@@ -67,7 +67,7 @@ if ingredients_list:
         st.subheader(f"{fruit_chosen} Nutrition information")
 
         # Usar SEARCH_ON en la llamada a la API
-        api_url = f"https://my.smoothiefroot.com/api/fruit/{search_on_value}"
+        api_url = f"https://my.smoothiefroot.com/api/fruit/{search_on}"
         smoothiefroot_response = requests.get(api_url)
 
         # Verificar si la respuesta es válida antes de mostrarla
