@@ -58,8 +58,11 @@ if ingredients_list:
     ingredients_string = ' '.join(ingredients_list)  # Convertir la lista en una cadena de texto
     
     for fruit_chosen in ingredients_list:
-        # Obtener el valor de SEARCH_ON correspondiente
-        search_on_value = search_on_mapping.get(fruit_chosen, fruit_chosen)  # Usar FRUIT_NAME si no hay SEARCH_ON
+       # Obtener el valor de SEARCH_ON correspondiente
+        search_on = my_dataframe.loc[my_dataframe['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+
+        # Validar la relación
+        st.write('The search value for', fruit_chosen, 'is', search_on, '.')
 
         st.subheader(f"{fruit_chosen} Nutrition information")
 
