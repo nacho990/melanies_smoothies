@@ -1,5 +1,6 @@
 # Importar paquetes necesarios
 import streamlit as st
+import requests
 from snowflake.snowpark import Session
 from snowflake.snowpark.functions import col
 
@@ -65,6 +66,5 @@ if ingredients_list:
         except Exception as e:
             st.error(f"❌ Error al insertar datos: {e}")
 
-import requests
 smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
 st.text(smoothiefroot_response)
