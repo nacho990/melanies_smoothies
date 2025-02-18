@@ -64,3 +64,7 @@ if ingredients_list:
             st.success('✅ Your Smoothie is ordered!')
         except Exception as e:
             st.error(f"❌ Error al insertar datos: {e}")
+
+import requests
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+st.text(smoothiefroot_response)
