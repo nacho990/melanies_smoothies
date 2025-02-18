@@ -41,6 +41,10 @@ st.write("The name on your Smoothie will be:", name_on_order)
 # Obtener ingredientes desde Snowflake
 try:
     my_dataframe = session.table("smoothies.public.fruit_options").select(col('fruit_name'),col('SEARCH_ON')).to_pandas()
+
+    # Crear un diccionario para mapear FRUIT_NAME -> SEARCH_ON
+    search_on_mapping = dict(zip(my_dataframe['FRUIT_NAME'], my_dataframe['SEARCH_ON']))
+    
     ingredients_list = st.multiselect(
         'Choose up to 5 ingredients:',
         my_dataframe['FRUIT_NAME'],  # Convertir a lista de pandas
@@ -51,14 +55,23 @@ except Exception as e:
 
 # Insertar orden en la base de datos
 if ingredients_list:
-    ingredients_string = ''
+    ingredients_string = ' '.join(ingredients_list)  # Convertir la lista en una cadena de texto
     
     for fruit_chosen in ingredients_list:
-        ingredients_string += fruit_chosen + ' '
+        # Obtener el valor de SEARCH_ON correspondiente
+        search_on_value = search_on_mapping.get(fruit_chosen, fruit_chosen)  # Usar FRUIT_NAME si no hay SEARCH_ON
 
-        st.subheader(fruit_chosen + ' Nutrition information')
-        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/" + fruit_chosen)
-        sf_df = st.dataframe(data = smoothiefroot_response.json(), use_container_width = True)
+        st.subheader(f"{fruit_chosen} Nutrition information")
+
+        # Usar SEARCH_ON en la llamada a la API
+        api_url = f"https://my.smoothiefroot.com/api/fruit/{search_on_value}"
+        smoothiefroot_response = requests.get(api_url)
+
+        # Verificar si la respuesta es válida antes de mostrarla
+        if smoothiefroot_response.status_code == 200:
+            sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+        else:
+            st.error(f"❌ Error al obtener información para {fruit_chosen}")
 
     time_to_insert = st.button('Submit Order')
 
