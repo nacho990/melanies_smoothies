@@ -51,11 +51,12 @@ except Exception as e:
 
 # Insertar orden en la base de datos
 if ingredients_list:
-    ingredients_string = ' '.join(ingredients_list)  # Convertir lista a string separado por espacios
-    my_insert_stmt = f"""
-        INSERT INTO smoothies.public.orders (ingredients, NAME_ON_ORDER)
-        VALUES ('{ingredients_string}', '{name_on_order}')
-    """
+    ingredients_string = ''
+    
+    for fruit_chosen in ingredients_list:
+        ingredients_string += fruit_chosen + ' '
+        smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+        sf_df = st.dataframe(data = smoothiefroot_response.json(), use_container_width = True)
 
     time_to_insert = st.button('Submit Order')
 
@@ -65,7 +66,3 @@ if ingredients_list:
             st.success('✅ Your Smoothie is ordered!')
         except Exception as e:
             st.error(f"❌ Error al insertar datos: {e}")
-
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
-st.text(smoothiefroot_response.json())
-sf_df = st.dataframe(data = smoothiefroot_response.json(), use_container_width = True)
