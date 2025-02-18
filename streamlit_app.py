@@ -78,9 +78,20 @@ if ingredients_list:
 
     time_to_insert = st.button('Submit Order')
 
-    if time_to_insert:
-        try:
-            session.sql(my_insert_stmt).collect()
-            st.success('✅ Your Smoothie is ordered!')
-        except Exception as e:
-            st.error(f"❌ Error al insertar datos: {e}")
+if time_to_insert:
+    try:
+        # Definir la sentencia SQL para insertar la orden en la base de datos
+        my_insert_stmt = f"""
+        INSERT INTO smoothies.public.orders (customer_name, ingredients)
+        VALUES ('{name_on_order}', '{ingredients_string}')
+        """
+        
+        # Mostrar la consulta generada en la app para verificar que es correcta
+        st.write("Generated SQL Statement:", my_insert_stmt)
+        
+        # Ejecutar la sentencia en Snowflake
+        session.sql(my_insert_stmt).collect()
+        st.success('✅ Your Smoothie is ordered!')
+    except Exception as e:
+        st.error(f"❌ Error al insertar datos: {e}")
+
